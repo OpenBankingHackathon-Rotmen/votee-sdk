@@ -1,0 +1,31 @@
+{
+  "name": "votee-sdk",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "files": [
+    "lib/**/*"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
+    "test": "mocha --reporter spec",
+    "lint": "tslint -p tsconfig.json"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^6.2.2",
+    "prettier": "^1.18.2",
+    "tslint": "^5.20.0",
+    "tslint-config-prettier": "^1.18.0",
+    "typescript": "^3.6.4"
+  },
+  "dependencies": {
+    "@types/crypto-js": "^3.1.43",
+    "@types/web3": "^1.0.20",
+    "crypto-js": "^3.1.9-1",
+    "eth-crypto": "^1.5.0",
+    "simple-crypto-js": "^2.2.0",
+    "web3": "^1.2.2"
+  }
+}
