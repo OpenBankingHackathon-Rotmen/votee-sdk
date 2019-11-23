@@ -5,7 +5,7 @@
     "module": "commonjs",
     "declaration": true,
     "strict": true,
-    "outDir": "./lib",
+    "outDir": "./dist",
     "noImplicitAny": false,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true

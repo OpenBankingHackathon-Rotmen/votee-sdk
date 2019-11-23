@@ -8,7 +8,6 @@ import * as ethers from 'ethers';
 import { Votee } from './utils/typechain/Votee';
 import { voteeAbi } from './utils/votee.abi';
 import { AbiCoder } from 'ethers/utils';
-import { Contract } from 'ethers';
 
 export class VoteeSdk {
   private identity: Identity;

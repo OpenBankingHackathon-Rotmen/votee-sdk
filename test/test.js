@@ -1,7 +1,7 @@
 'use strict';
 
 const expect = require('chai').expect;
-const VoteeSdk = require('../lib/index').VoteeSdk;
+const VoteeSdk = require('../dist/index').VoteeSdk;
 
 const fs = require('fs');
 
