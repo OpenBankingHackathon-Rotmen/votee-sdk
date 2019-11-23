@@ -1,12 +1,15 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "baseUrl": ".",
+    "target": "es6",
     "module": "commonjs",
     "declaration": true,
     "strict": true,
     "outDir": "./lib",
-    "noImplicitAny": false
+    "noImplicitAny": false,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true
   },
-  "include": ["src"],
+  "include": ["src/**/*", "truffle-config.js"],
   "exclude": ["node_modules", "**/__tests__/*"]
 }
