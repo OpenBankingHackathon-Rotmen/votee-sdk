@@ -62,7 +62,6 @@ class VoteeSdk {
             const logs = txReceipt.logs;
             if (logs !== undefined) {
                 const abiDecoded = new utils_1.AbiCoder().decode(['uint256', 'uint256', 'uint256'], logs[0].data);
-                console.log(logs);
                 return parseInt(abiDecoded[0], 16);
             }
             return -1;
@@ -146,6 +145,20 @@ class VoteeSdk {
             const contractInstance = VoteeSdk.initializeContractInstance(providerUrl, voteeContractAddress);
             const optionsCount = yield contractInstance.functions.getElectionOptionsCount(electionID);
             return optionsCount.toNumber();
+        });
+    }
+    static getElectionOptionAddress(providerUrl, voteeContractAddress, electionID, optionID) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const contractInstance = VoteeSdk.initializeContractInstance(providerUrl, voteeContractAddress);
+            const address = yield contractInstance.functions.getElectionOptionAddress(electionID, optionID);
+            return address;
+        });
+    }
+    static getElectionOptionVotes(providerUrl, voteeContractAddress, electionID, option) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const contractInstance = VoteeSdk.initializeContractInstance(providerUrl, voteeContractAddress);
+            const votes = yield contractInstance.functions.getElectionOptionVotes(electionID, option);
+            return votes.toNumber();
         });
     }
 }

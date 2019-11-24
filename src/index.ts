@@ -63,7 +63,6 @@ export class VoteeSdk {
     const logs = txReceipt.logs;
     if (logs !== undefined) {
       const abiDecoded = new AbiCoder().decode(['uint256', 'uint256', 'uint256'], logs[0].data);
-      console.log(logs);
       return parseInt(abiDecoded[0], 16);
     }
     return -1;
@@ -168,5 +167,25 @@ export class VoteeSdk {
     return optionsCount.toNumber();
   }
 
-  //static async getElectionOptionAddress(): Promise<string> {}
+  static async getElectionOptionAddress(
+    providerUrl: string,
+    voteeContractAddress: string,
+    electionID: number,
+    optionID: number,
+  ): Promise<string> {
+    const contractInstance = VoteeSdk.initializeContractInstance(providerUrl, voteeContractAddress);
+    const address = await contractInstance.functions.getElectionOptionAddress(electionID, optionID);
+    return address;
+  }
+
+  static async getElectionOptionVotes(
+    providerUrl: string,
+    voteeContractAddress: string,
+    electionID: number,
+    option: string,
+  ): Promise<number> {
+    const contractInstance = VoteeSdk.initializeContractInstance(providerUrl, voteeContractAddress);
+    const votes = await contractInstance.functions.getElectionOptionVotes(electionID, option);
+    return votes.toNumber();
+  }
 }

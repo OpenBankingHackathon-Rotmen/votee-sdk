@@ -16,4 +16,6 @@ export declare class VoteeSdk {
     static getElectionDurationPeriod(providerUrl: string, voteeContractAddress: string, electionID: number): Promise<ElectionDurationPeriod>;
     static isAnonymizedIdentifierAllowedToVote(providerUrl: string, voteeContractAddress: string, electionID: number, anonymizedIdentifier: string): Promise<boolean>;
     static getElectionOptionsCount(providerUrl: string, voteeContractAddress: string, electionID: number): Promise<number>;
+    static getElectionOptionAddress(providerUrl: string, voteeContractAddress: string, electionID: number, optionID: number): Promise<string>;
+    static getElectionOptionVotes(providerUrl: string, voteeContractAddress: string, electionID: number, option: string): Promise<number>;
 }

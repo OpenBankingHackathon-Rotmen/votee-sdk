@@ -103,4 +103,16 @@ describe('Voteesdk class tests', async () => {
     const count = await VoteeSdk.getElectionOptionsCount(providerUrl, contractAddress, electionId);
     expect(count).to.equal(1);
   });
+
+  it('should return the option address', async () => {
+    const address = await VoteeSdk.getElectionOptionAddress(providerUrl, contractAddress, electionId, 0);
+    const optionAddress = '0xb0E624Fd26EA982e101D2273eb9a1537DEE1d403';
+    expect(address).to.equal(optionAddress);
+  });
+
+  it('should return the number of votes for an option', async () => {
+    const optionAddress = '0xb0E624Fd26EA982e101D2273eb9a1537DEE1d403';
+    const votes = await VoteeSdk.getElectionOptionVotes(providerUrl, contractAddress, electionId, optionAddress);
+    expect(votes).to.equal(1);
+  });
 });
