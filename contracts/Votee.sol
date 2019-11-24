@@ -4,9 +4,9 @@ contract Votee {
 
     // Events
 
-    event ElectionScheduled(uint electionID);
+    event ElectionScheduled(uint electionID, uint startTimestamp, uint duration);
     event RegisteredIdentifier(uint electionID, bytes32 anonymizedIdentifier);
-    event RegisteredOption(uint electionID, address option);
+    event RegisteredOption(uint electionID, address option, uint optionID);
 
     event Voted(uint electionID, bytes32 indexed anonymizedIdentifier);
 
@@ -46,14 +46,8 @@ contract Votee {
     }
 
     modifier isElectionAlive(uint _electionID) {
-        require(
-            block.timestamp > elections[_electionID].startsAtTimestamp
-            &&
-            block.timestamp < elections[_electionID].startsAtTimestamp
-            +
-            elections[_electionID].endsWithinSeconds,
-            "Election does not exist"
-            );
+        require(block.timestamp > elections[_electionID].startsAtTimestamp, 'Too early');
+        require(block.timestamp < elections[_electionID].startsAtTimestamp + elections[_electionID].endsWithinSeconds, "Too late");
         _;
     }
 
@@ -68,11 +62,11 @@ contract Votee {
     }
     // Owner restricted methods
 
-    function scheduleElections(uint _startsAtTimestamp, uint _endsWithinSeconds) public isOwner() {
+    function scheduleElections(uint _startsAtTimestamp, uint _endsWithinSeconds) public isOwner() returns (uint) {
         elections[electionsCount].startsAtTimestamp = _startsAtTimestamp;
         elections[electionsCount].endsWithinSeconds = _endsWithinSeconds;
-        emit ElectionScheduled(electionsCount);
-        electionsCount++;
+        emit ElectionScheduled(electionsCount, _startsAtTimestamp, _endsWithinSeconds);
+        return electionsCount++;
     }
 
     function registerIdentifier(uint _electionID, bytes32 _identifierHash) public
@@ -88,26 +82,66 @@ contract Votee {
     isOwner()
     isElectionSchedule(_electionID)
     isElectionAlive(_electionID)
+    returns(uint)
     {
         elections[_electionID].options.push(_option);
-        emit RegisteredOption(_electionID, _option);
-        elections[_electionID].optionsCount++;
+        emit RegisteredOption(_electionID, _option, elections[_electionID].optionsCount);
+        return elections[_electionID].optionsCount++;
     }
 
     // Voting
 
-    function vote(uint _electionID, uint _optionID, bytes memory _identifier) public
+    function vote(uint _electionID, uint _optionID, bytes32 _identifier) public
     isOwner()
     isElectionSchedule(_electionID)
     isElectionAlive(_electionID)
     didNotVote(_electionID)
     doesOptionExist(_electionID, _optionID)
     {
-        bytes32 _anonymizedIdentifier = keccak256(_identifier);
+        bytes32 _anonymizedIdentifier = keccak256(abi.encode(_identifier));
         require(elections[_electionID].allowedAnonymizedIdentifiers[_anonymizedIdentifier], "Invalid identifier");
         elections[_electionID].allowedAnonymizedIdentifiers[_anonymizedIdentifier] = false;
         elections[_electionID].didVote[msg.sender] = true;
         elections[_electionID].votes[elections[_electionID].options[_optionID]]++;
         emit Voted(_electionID, _anonymizedIdentifier);
+    }
+
+    // View functions
+
+    function getElectionsCount() public view returns(uint) {
+        return electionsCount;
+    }
+
+    function getElectionStartTime(uint _electionID) public isElectionSchedule(_electionID) view returns(uint) {
+        return elections[_electionID].startsAtTimestamp;
+    }
+
+    function getElectionDuration(uint _electionID) public isElectionSchedule(_electionID) view returns(uint) {
+        return elections[_electionID].endsWithinSeconds;
+    }
+
+    function isIdentifierAllowed(uint _electionID, bytes32 _anonymizedIdentifier) public isElectionSchedule(_electionID) view returns(bool) {
+        return elections[_electionID].allowedAnonymizedIdentifiers[_anonymizedIdentifier];
+    }
+
+    function didVote(uint _electionID, address _voter) public isElectionSchedule(_electionID) view returns(bool) {
+        return elections[_electionID].didVote[_voter];
+    }
+
+    function getElectionOptionsCount(uint _electionID) public isElectionSchedule(_electionID) view returns(uint) {
+        return elections[_electionID].optionsCount;
+    }
+
+    function getElectionOptionAddress(uint _electionID, uint _optionID) public
+    isElectionSchedule(_electionID)
+    doesOptionExist(_electionID, _optionID)
+    view returns(address) {
+        return elections[_electionID].options[_optionID];
+    }
+
+    function getElectionOptionVotes(uint _electionID, address _option) public
+    isElectionSchedule(_electionID)
+    view returns(uint) {
+        return elections[_electionID].votes[_option];
     }
 }

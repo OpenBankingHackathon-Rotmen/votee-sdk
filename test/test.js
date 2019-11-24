@@ -11,7 +11,7 @@ describe('Voteesdk class tests', async () => {
   const infuraProjectID = '9defdc016d654060a6d372cbe5b2de0c';
 
   const providerUrl = 'http://localhost:7545';
-  const contractAddress = '0xd9802ba8D9E16BB89828896e087C0c6c1Ef066CE';
+  const contractAddress = '0x3ed3898eBC0b497E4C15F0D29cFAFF9B2145De2F';
 
   const voteeSdk = new VoteeSdk(providerUrl, privateKey, contractAddress);
 
