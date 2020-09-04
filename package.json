@@ -30,7 +30,7 @@
     "crypto-js": "^3.1.9-1",
     "eth-crypto": "^1.5.0",
     "ethers": "^4.0.39",
-    "simple-crypto-js": "^2.2.0",
+    "simple-crypto-js": "^2.3.0",
     "typechain-target-ethers": "^1.0.3",
     "web3": "1.2.1"
   }
